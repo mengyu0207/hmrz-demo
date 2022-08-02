@@ -1,130 +1,95 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
- <!-- 放置标题图片 @是设置的别名-->
-<div class="title-container">
+    <el-form
+      ref="loginForm"
+      :model="LoginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
+      <!-- 放置标题图片 @是设置的别名-->
+      <div class="title-container">
         <h3 class="title">
-          <img src="~@/assets/common/login-logo.png" alt="">
+          <img src="~@/assets/common/login-logo.png" alt="" />
         </h3>
- </div>
+      </div>
+      <!-- 表单区域 -->
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+      <el-form-item prop="mobile">
+        <i class="el-icon-user-solid svg-container"></i>
+        <el-input v-model="LoginForm.mobile"></el-input>
       </el-form-item>
-
       <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
+        <i class="svg-container">
+          <svg-icon iconClass="password"></svg-icon>
+        </i>
+        <el-input v-model="LoginForm.password"></el-input>
       </el-form-item>
-
-      <el-button :loading="loading" class="loginBtn" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button
+        class="loginBtn"
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        @click="loginFn"
+        :loading="isLogin"
+        >Login</el-button
+      >
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
+        <span style="margin-right: 20px">username: admin</span>
         <span> password: any</span>
       </div>
-
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+// import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
-      loginForm: {
-        username: 'admin',
-        password: '111111'
+      isLogin: false,
+      LoginForm: {
+        mobile: '13800000002',
+        password: '123456',
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        mobile: [
+          { required: true, message: '请填写手机号' },
+          {
+            pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+            message: '手机号码格式不正确',
+            trigger: 'blur',
+          },
+        ],
+        password: [
+          { required: true, message: '请填写密码' },
+          // {
+          //   pattern:
+          //     /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]/,
+          //   message: '密码格式为大写字母/小写字母/数字/特殊符号，任意三项组合',
+          //   trigger: 'blur',
+          // },
+        ],
       },
-      loading: false,
-      passwordType: 'password',
-      redirect: undefined
     }
   },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
-  },
+
   methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
+    async loginFn() {
+      this.isLogin = true
+      try {
+        await this.$refs.loginForm.validate()
+        await this.$store.dispatch('user/getToken', this.LoginForm)
+        this.$router.push('/')
+        this.$message.success('登录成功')
+      } finally {
+        this.isLogin = false
       }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    }
-  }
+  },
 }
 </script>
 
@@ -132,8 +97,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:pink;
+$bg: #283443;
+$light_gray: pink;
 $cursor: pink;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -145,7 +110,7 @@ $cursor: pink;
 /* reset element-ui css */
 .login-container {
   background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
-  background-position: center; // 将图片位置设置为充满整个屏幕
+  ba3ckground-position: center; // 将图片位置设置为充满整个屏幕
   .el-input {
     display: inline-block;
     height: 47px;
@@ -175,25 +140,25 @@ $cursor: pink;
     color: #454545;
   }
   .loginBtn {
-  background: #407ffe;
-  height: 64px;
-  line-height: 32px;
-  font-size: 24px;
-}
+    background: #407ffe;
+    height: 64px;
+    line-height: 32px;
+    font-size: 24px;
+  }
 }
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-    background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
+  background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
   background-position: center; // 将图片位置设置为充满整个屏幕
   .login-form {
     position: relative;
