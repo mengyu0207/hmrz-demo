@@ -1,12 +1,16 @@
-import { login } from '@/api/user'
+import {getUserInfoAPI, getUserDetailById,login } from '@/api/user'
 export default {
   namespaced: true,
   state: {
-    token: ''
+    token: '',
+    userInfo:{}
   },
   mutations: {
     setToken(state,payload){
       state.token=payload
+    },
+    setUserInfo(state,payload){
+      state.userInfo=payload
     }
   },
   actions: {
@@ -16,6 +20,14 @@ export default {
       console.log(res);
       context.commit('setToken',res)
    
+    },
+   async getUserInfo(context){
+       const res= await getUserInfoAPI()
+     const userDetailInfo= await getUserDetailById(res.userId)
+     console.log(userinfo);
+      console.log(res);
+     context.commit('setUserInfo',{...userDetailInfo,...res})
+ 
     }
   }
 }
