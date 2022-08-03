@@ -1,6 +1,10 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSideBar"
+    />
     <div class="app-breadcrumb">
       江苏传智播客教育科技股份有限公司
       <span class="breadBtn">体验版</span>
@@ -10,8 +14,11 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="$store.state.user.userInfo.staffPhoto" class="user-avatar"
-           v-imgError="defaultImg" />
+          <img
+            :src="$store.state.user.userInfo.staffPhoto"
+            class="user-avatar"
+            v-imgError="defaultImg"
+          />
           <span>{{ $store.state.user.userInfo.departmentName }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
@@ -21,7 +28,7 @@
           </router-link>
 
           <el-dropdown-item divided @click.native="logout">
-            <span style="display: block" >Log Out</span>
+            <span style="display: block">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -33,12 +40,12 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import  defaultImg from '@/assets/common/yg.jpg'
+import defaultImg from '@/assets/common/yg.jpg'
 
 export default {
   data() {
     return {
-      defaultImg
+      defaultImg,
     }
   },
   components: {
@@ -54,7 +61,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-     this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
   },
 }
@@ -83,7 +90,8 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-image: -webkit-linear-gradient(left, #3d6df8, #5b8cff);
+  // background-image: -webkit-linear-gradient(left, #3d6df8, #5b8cff);
+  background-color: pink;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
