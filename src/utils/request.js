@@ -13,7 +13,7 @@ function isTimeout(){
 }
 const service = axios.create({
   baseURL: 'http://localhost:8888/api',
-  timeout: 5000
+  // timeout: 5000
 })
 service.interceptors.request.use(async(config) => {
     if (store.state.user.token) {

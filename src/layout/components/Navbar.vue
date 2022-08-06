@@ -22,6 +22,9 @@
           <span>{{ $store.state.user.userInfo.departmentName }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
+        <div style="height: 60px; line-height: 60px">
+          <span style="vertical-align: middle">欢迎您 ！宇哥</span>
+        </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item> Home </el-dropdown-item>
