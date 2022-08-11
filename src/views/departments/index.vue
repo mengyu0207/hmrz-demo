@@ -28,7 +28,7 @@
       :currentNode="currentNode"
     />
   </div>
-</template>
+</template>~
 
 <script>
 import addDept from './components/add-dept'

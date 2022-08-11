@@ -6,11 +6,12 @@
           <el-button type="primary">新增角色</el-button></el-tab-pane
         >
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180">
+          <el-table-column prop="date" label="序号" width="180">
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+          <el-table-column prop="name" label="角色" width="180">
           </el-table-column>
-          <el-table-column prop="address" label="地址"> </el-table-column>
+          <el-table-column prop="address" label="描述"> </el-table-column>
+          <el-table-column  label="操作"> </el-table-column>
         </el-table>
         <el-tab-pane label="角色管理" name="third">公司信息</el-tab-pane>
       </el-tabs>
