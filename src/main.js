@@ -12,10 +12,26 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+// import dayjs from 'dayjs'
+// Vue.filter('formatTime',(val) =>{
+//   return dayjs(val).format('YYYY-MM-DD')
+// })
+//过滤器封装
+import*as filters from '@/filters'
+// 统一注册过滤器
+for(let key in filters){
+  Vue.filter(key,filters[key])
+}
+
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as directives from '@/directive'
 console.log(directives);
+
+//封装组件
+import component from '@/components'
+// 统一注册组件
+Vue.use(component)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
