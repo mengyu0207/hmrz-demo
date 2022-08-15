@@ -1,5 +1,8 @@
 <template>
-  <div>首页</div>
+  <div>
+    <UploadImg @onSuccess="onSuccess1" />
+    <h1>首页</h1>
+  </div>
 </template>
 <script>
 export default {
@@ -11,7 +14,14 @@ export default {
   computed: {},
   beforeMount() {},
   mounted() {},
-  methods: {},
+  methods: {
+    onSuccess1({ url }) {
+      console.log('a请求', url)
+    },
+    onSuccess2({ url }) {
+      console.log(url)
+    },
+  },
   watch: {},
 }
 </script>

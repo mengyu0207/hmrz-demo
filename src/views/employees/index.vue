@@ -34,6 +34,7 @@
                   hight: 100px;
                   padding: 10px;
                 "
+                @click="showImgQRcode(row.staffPhoto)"
               />
             </template>
           </el-table-column>
@@ -98,6 +99,14 @@
           @add-success="getEmployeesInfo"
           :Visible.sync="addvisible"
         />
+        <!-- 弹层二维码 -->
+        <el-dialog
+          title="二维码"
+          :visible.sync="ercodeDialog"
+          @close="ercodeDialog = false"
+        >
+          <canvas id="canvas"></canvas>
+        </el-dialog>
       </el-card>
     </div>
   </div>
@@ -108,9 +117,11 @@ import importModule from '@/router/index'
 import employees from '@/constant/employees'
 import { getEmployeesInfoApi, delEmployeeApi } from '@/api/employees'
 import addEmployees from './components/add-employeess.vue'
+import QRcode from 'qrcode'
 export default {
   data() {
     return {
+      ercodeDialog: false,
       addvisible: false,
       DeleteVisible: false,
       total: 0,
@@ -162,6 +173,15 @@ export default {
       await this.$confirm('确认删除？')
       await delEmployeeApi(id)
       this.getEmployeesInfo()
+    },
+    // 二维码
+    showImgQRcode(staffPhoto) {
+      if (!staffPhoto) return this.$message.error('不要着急嘛~')
+      this.ercodeDialog = true
+      this.$nextTick(() => {
+        const canvas = document.getElementById('canvas')
+        QRcode.toCanvas(canvas, staffPhoto)
+      })
     },
   },
 }
