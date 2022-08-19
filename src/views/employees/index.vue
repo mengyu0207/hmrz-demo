@@ -72,7 +72,9 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="assignFn(row.id)"
+                >角色</el-button
+              >
               <el-button type="text" size="small" @click="OnMove(row.id)"
                 >删除</el-button
               >
@@ -109,6 +111,11 @@
         </el-dialog>
       </el-card>
     </div>
+    <!-- 分配角色 -->
+    <assiginRole
+      :employeesId="currentEmployeesID"
+      :visible.sync="showAssignVisible"
+    />
   </div>
 </template>
 
@@ -117,10 +124,14 @@ import importModule from '@/router/index'
 import employees from '@/constant/employees'
 import { getEmployeesInfoApi, delEmployeeApi } from '@/api/employees'
 import addEmployees from './components/add-employeess.vue'
+import assiginRole from './components/assign-role.vue'
 import QRcode from 'qrcode'
 export default {
   data() {
     return {
+      currentEmployeesID: '',
+      showAssignVisible: false,
+      visible: '',
       ercodeDialog: false,
       addvisible: false,
       DeleteVisible: false,
@@ -134,12 +145,18 @@ export default {
   },
   components: {
     addEmployees,
+    assiginRole,
   },
   created() {
     this.getEmployeesInfo()
   },
 
   methods: {
+    // 角色按钮
+    assignFn(id) {
+      this.showAssignVisible = true
+      this.currentEmployeesID = id
+    },
     async exportExcel() {
       await import('@/vendor/Export2Excel').then((excel) => {
         excel.export_json_to_excel({

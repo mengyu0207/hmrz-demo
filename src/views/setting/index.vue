@@ -15,7 +15,9 @@
             <el-table-column prop="description" label="描述"> </el-table-column>
             <el-table-column label="操作">
               <template>
-                <el-button size="small" type="success">分配权限</el-button>
+                <el-button size="small" type="success" @click="assignFn"
+                  >分配权限</el-button
+                >
                 <el-button size="small" type="primary">编辑</el-button>
                 <el-button size="small" type="danger">删除</el-button>
               </template>
@@ -79,15 +81,41 @@
         </span>
       </el-dialog>
     </template>
+    <!-- 分配权限弹窗 -->
+    <el-dialog
+      title="给角色分配权限"
+      :visible.sync="assiginVisible"
+      width="30%"
+    >
+      <el-tree
+        :data="permissionData"
+        :props="{ label: 'name' }"
+        default-expand-all
+        show-checkbox
+        node-key="id"
+        :default-checked-keys="defaultCheckKeys"
+      ></el-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="assiginVisible = false">取 消</el-button>
+        <el-button type="primary" @click="assiginVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getRolesApi, addRolesApi } from '@/api/role'
 import { findCompanyApi } from '@/api/setting'
+import { getPermissionList } from '@/api/permission'
+import { tranListToTreeData } from '@/utils'
 export default {
   data() {
     return {
+      defaultCheckKeys: ['1', '1063328114689576960'],
+      permissionData: [],
+      assiginVisible: false,
       companyInfo: '',
       activeName: 'second',
       tableData: [],
@@ -120,9 +148,14 @@ export default {
   created() {
     this.getRoles()
     this.findCompany()
+    this.getPermissions()
   },
 
   methods: {
+    //分配权限按钮
+    assignFn() {
+      this.assiginVisible = true
+    },
     handleClick(tab, event) {
       console.log(tab, event)
     },
@@ -152,6 +185,14 @@ export default {
       )
       console.log('公司信息', res)
       this.companyInfo = res
+    },
+    // 获取权限列表
+    async getPermissions() {
+      const res = await getPermissionList()
+      const treeData = tranListToTreeData(res, '0')
+      this.permissionData = treeData
+      console.log('权限列表数据', res)
+      console.log('666', this.permissionData)
     },
   },
 }
