@@ -29,6 +29,7 @@
           </el-tab-pane>
 
           <el-tab-pane label="岗位信息" />
+          <jobInfo />
         </el-tabs>
       </el-card>
     </div>
@@ -37,6 +38,7 @@
 <script>
 import { getUserDetailById, saveUserDetailById } from '@/api/user'
 import userInfo from './components/user-info.vue'
+import jobInfo from './components/job-info.vue'
 export default {
   name: '',
   data() {
@@ -49,6 +51,7 @@ export default {
   },
   components: {
     userInfo,
+    jobInfo,
   },
   computed: {},
   beforeMount() {},

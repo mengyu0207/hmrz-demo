@@ -12,6 +12,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import Print from 'vue-print-nb' 
+Vue.use(Print)
 // import dayjs from 'dayjs'
 // Vue.filter('formatTime',(val) =>{
 //   return dayjs(val).format('YYYY-MM-DD')
