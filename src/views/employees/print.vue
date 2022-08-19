@@ -10,6 +10,7 @@
           </el-breadcrumb-item>
           <el-breadcrumb-item>打印</el-breadcrumb-item>
         </el-breadcrumb>
+        <!-- 用户详情 -->
         <div v-if="type === 'personal'">
           <h2 class="centInfo">员工信息表</h2>
           <table cellspacing="0" width="100%" class="tableList">
